@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
+from app.api.v1.auth import router as v1_auth_router
+from app.api.v1.contacts import router as v1_contacts_router
+from app.api.v1.emergencies import router as v1_emergencies_router
 from app.api.v1.health import router as v1_health_router
 from app.core.config import settings
 
@@ -44,8 +47,11 @@ def create_app() -> FastAPI:
             "service": settings.APP_NAME,
         }
 
-    # API v1 Router
+    # API v1 Routers
     app.include_router(v1_health_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(v1_auth_router, prefix=f"{settings.API_V1_PREFIX}/auth")
+    app.include_router(v1_contacts_router, prefix=f"{settings.API_V1_PREFIX}/contacts")
+    app.include_router(v1_emergencies_router, prefix=f"{settings.API_V1_PREFIX}/emergencies")
 
     return app
 
